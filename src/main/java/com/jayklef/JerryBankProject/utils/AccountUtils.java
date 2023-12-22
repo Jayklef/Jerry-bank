@@ -4,6 +4,11 @@ import java.time.Year;
 
 public class AccountUtils {
 
+    public static final String ACCOUNT_EXISTS_CODE = "002";
+    public static final String ACCOUNT_EXISTS_MESSAGE = "CUSTOMER HAS AN ACCOUNT";
+    public static final String ACCOUNT_CREATED_SUCCESSFULLY_CODE = "001";
+    public static final String ACCOUNT_CREATED_SUCCESSFULLY_MESSAGE = "Account created successfully";
+
     public static String generateAccountNumber(){
 
         Year currentYear = Year.now();
