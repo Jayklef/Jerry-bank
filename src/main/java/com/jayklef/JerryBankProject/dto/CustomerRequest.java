@@ -19,5 +19,4 @@ public class CustomerRequest {
     private String alternateNumber;
     private String address;
     private String state;
-    private String status;
 }
