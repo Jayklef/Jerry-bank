@@ -18,7 +18,7 @@ public class CustomerController {
     CustomerService customerService;
 
     @PostMapping("create")
-    public BankResponse createCustomer(@RequestBody CustomerRequest customerRequest){
+    public BankResponse createAccount(@RequestBody CustomerRequest customerRequest){
         return customerService.createAccount(customerRequest);
     }
 }

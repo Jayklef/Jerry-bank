@@ -54,7 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .responseMessage(AccountUtils.ACCOUNT_CREATED_SUCCESSFULLY_MESSAGE)
                 .accountInfo(AccountInfo.builder()
                         .accountNumber(customerNew.getAccountNumber())
-                        .accountName(customerNew.getFirstname().concat(customerNew.getLastname()).concat(customerNew.getMiddleName()))
+                        .accountName(customerNew.getFirstname().concat(" ").concat(customerNew.getLastname()).concat(" ").concat(" ").concat(customerNew.getMiddleName()))
                         .accountBalance(customerNew.getAccountBalance())
                         .build())
                 .build();
