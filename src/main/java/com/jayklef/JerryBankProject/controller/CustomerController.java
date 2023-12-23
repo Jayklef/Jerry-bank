@@ -21,4 +21,5 @@ public class CustomerController {
     public BankResponse createAccount(@RequestBody CustomerRequest customerRequest){
         return customerService.createAccount(customerRequest);
     }
+
 }
