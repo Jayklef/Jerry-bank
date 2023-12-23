@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -108,5 +109,76 @@ public class CustomerServiceImpl implements CustomerService {
         Customer foundCustomer = customerRepository.findByAccountNumber(request.getAccountNumber());
         return foundCustomer.getFirstname() + " "+ foundCustomer.getLastname()+ " "+
                 foundCustomer.getMiddleName();
+    }
+
+    @Override
+    public BankResponse creditAccount(CreditDebitRequest request) {
+
+        // check if account exists
+        boolean isAccountExist = customerRepository.existsByAccountNumber(request.getAccountNumber());
+        if (!isAccountExist){
+
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXISTS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        Customer customerToCredit = customerRepository.findByAccountNumber(request.getAccountNumber());
+        customerToCredit.setAccountBalance(customerToCredit.getAccountBalance().add(request.getAmount()));
+
+        customerRepository.save(customerToCredit);
+
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_CREDITED_SUCCESSFULLY_CODE)
+                .responseMessage(AccountUtils.ACCOUNT_CREDITED_SUCCESSFULLY_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountNumber(request.getAccountNumber())
+                        .accountName(customerToCredit.getFirstname()+ " "+ customerToCredit.getLastname()+" "
+                        +customerToCredit.getLastname())
+                        .accountBalance(customerToCredit.getAccountBalance())
+                        .build())
+                .build();
+    }
+
+    @Override
+    public BankResponse debitAccount(CreditDebitRequest request) {
+        boolean isAccountExist = customerRepository.existsByAccountNumber(request.getAccountNumber());
+
+        if (!isAccountExist){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXISTS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        Customer customerToDebit = customerRepository.findByAccountNumber(request.getAccountNumber());
+        BigInteger availableBalance = (customerToDebit.getAccountBalance().toBigInteger());
+        BigInteger amountToDebit = (request.getAmount().toBigInteger());
+
+        if (availableBalance.intValue() < amountToDebit.intValue()){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.INSUFFICIENT_BALANCE_CODE)
+                    .responseMessage(AccountUtils.INSUFFICIENT_BALANCE_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }else {
+            customerToDebit.setAccountBalance(customerToDebit.getAccountBalance().subtract(request.getAmount()));
+            customerRepository.save(customerToDebit);
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_DEBITED_SUCCESSFULLY_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_DEBITED_SUCCESSFULLY_MESSAGE)
+                    .accountInfo(AccountInfo.builder()
+                            .accountNumber(request.getAccountNumber())
+                            .accountName(customerToDebit.getFirstname()+ " "+
+                                    customerToDebit.getLastname()+ " "+
+                                    customerToDebit.getMiddleName())
+                            .accountBalance(customerToDebit.getAccountBalance())
+                            .build())
+                    .build();
+        }
+
     }
 }

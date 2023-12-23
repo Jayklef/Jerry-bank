@@ -1,6 +1,7 @@
 package com.jayklef.JerryBankProject.controller;
 
 import com.jayklef.JerryBankProject.dto.BankResponse;
+import com.jayklef.JerryBankProject.dto.CreditDebitRequest;
 import com.jayklef.JerryBankProject.dto.CustomerRequest;
 import com.jayklef.JerryBankProject.dto.EnquiryRequest;
 import com.jayklef.JerryBankProject.model.Customer;
@@ -28,6 +29,16 @@ public class CustomerController {
     @GetMapping("nameEnquiry")
     public String nameEnquiry(@RequestBody EnquiryRequest enquiryRequest){
         return customerService.nameEnquiry(enquiryRequest);
+    }
+
+    @PostMapping("credit")
+    public BankResponse creditAccount(@RequestBody CreditDebitRequest request){
+        return customerService.creditAccount(request);
+    }
+
+    @PostMapping("debit")
+    public BankResponse debitAccount(@RequestBody CreditDebitRequest request){
+        return customerService.debitAccount(request);
     }
 
 }
