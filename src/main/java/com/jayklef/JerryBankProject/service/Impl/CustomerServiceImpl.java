@@ -1,9 +1,6 @@
 package com.jayklef.JerryBankProject.service.Impl;
 
-import com.jayklef.JerryBankProject.dto.AccountInfo;
-import com.jayklef.JerryBankProject.dto.BankResponse;
-import com.jayklef.JerryBankProject.dto.CustomerRequest;
-import com.jayklef.JerryBankProject.dto.EmailDetails;
+import com.jayklef.JerryBankProject.dto.*;
 import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.repository.CustomerRepository;
 import com.jayklef.JerryBankProject.service.CustomerService;
@@ -74,5 +71,29 @@ public class CustomerServiceImpl implements CustomerService {
                         .build())
                 .build();
 
+    }
+
+    @Override
+    public BankResponse balanceEnquiry(EnquiryRequest request) {
+        boolean isAccountExist = customerRepository.existsByAccountNumber(request.getAccountNumber());
+
+        if (!isAccountExist){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXISTS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        Customer foundCustomer = customerRepository.findByAccountNumber(request.getAccountNumber());
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_FOUND_CODE)
+                .responseMessage(AccountUtils.ACCOUNT_FOUND_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountNumber(request.getAccountNumber())
+                        .accountName(foundCustomer.getFirstname()+ " " + foundCustomer.getLastname()+ " "+ foundCustomer.getMiddleName())
+                        .accountBalance(foundCustomer.getAccountBalance())
+                        .build())
+                .build();
     }
 }
