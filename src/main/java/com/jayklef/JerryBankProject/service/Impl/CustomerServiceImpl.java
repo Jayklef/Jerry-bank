@@ -96,4 +96,17 @@ public class CustomerServiceImpl implements CustomerService {
                         .build())
                 .build();
     }
+
+    @Override
+    public String nameEnquiry(EnquiryRequest request) {
+        boolean isAccountExist = customerRepository.existsByAccountNumber(request.getAccountNumber());
+
+        if (!isAccountExist){
+            return AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE;
+        }
+
+        Customer foundCustomer = customerRepository.findByAccountNumber(request.getAccountNumber());
+        return foundCustomer.getFirstname() + " "+ foundCustomer.getLastname()+ " "+
+                foundCustomer.getMiddleName();
+    }
 }

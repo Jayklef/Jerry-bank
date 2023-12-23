@@ -9,5 +9,5 @@ public interface CustomerService {
     BankResponse createAccount(CustomerRequest customerRequest);
 
     BankResponse balanceEnquiry(EnquiryRequest request);
-    
+    String nameEnquiry(EnquiryRequest request);
 }
