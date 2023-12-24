@@ -1,9 +1,6 @@
 package com.jayklef.JerryBankProject.service;
 
-import com.jayklef.JerryBankProject.dto.BankResponse;
-import com.jayklef.JerryBankProject.dto.CreditDebitRequest;
-import com.jayklef.JerryBankProject.dto.CustomerRequest;
-import com.jayklef.JerryBankProject.dto.EnquiryRequest;
+import com.jayklef.JerryBankProject.dto.*;
 
 public interface CustomerService {
 
@@ -14,4 +11,5 @@ public interface CustomerService {
 
     BankResponse creditAccount(CreditDebitRequest request);
     BankResponse debitAccount(CreditDebitRequest request);
+    BankResponse transfer(TransferRequest transferRequest);
 }

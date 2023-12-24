@@ -1,9 +1,6 @@
 package com.jayklef.JerryBankProject.controller;
 
-import com.jayklef.JerryBankProject.dto.BankResponse;
-import com.jayklef.JerryBankProject.dto.CreditDebitRequest;
-import com.jayklef.JerryBankProject.dto.CustomerRequest;
-import com.jayklef.JerryBankProject.dto.EnquiryRequest;
+import com.jayklef.JerryBankProject.dto.*;
 import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,11 @@ public class CustomerController {
     @PostMapping("debit")
     public BankResponse debitAccount(@RequestBody CreditDebitRequest request){
         return customerService.debitAccount(request);
+    }
+
+    @PostMapping("transfer")
+    public BankResponse transfer(@RequestBody TransferRequest transferRequest){
+        return customerService.transfer(transferRequest);
     }
 
 }

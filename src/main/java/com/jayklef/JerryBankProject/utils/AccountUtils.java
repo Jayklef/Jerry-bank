@@ -16,9 +16,10 @@ public class AccountUtils {
     public static final String ACCOUNT_CREDITED_SUCCESSFULLY_MESSAGE = "Account created successfully";
     public static final String INSUFFICIENT_BALANCE_CODE = "006";
     public static final String INSUFFICIENT_BALANCE_MESSAGE = "Insufficient Balance";
-    public static final String ACCOUNT_DEBITED_SUCCESSFULLY_CODE = "005";
+    public static final String ACCOUNT_DEBITED_SUCCESSFULLY_CODE = "007";
     public static final String ACCOUNT_DEBITED_SUCCESSFULLY_MESSAGE = "Account created successfully";
-
+    public static final String TRANSFER_SUCCESSFUL_CODE = "008";
+    public static final String TRANSFER_SUCCESSFUL_MESSAGE = "Transfer was successful done";
     public static String generateAccountNumber(){
 
         Year currentYear = Year.now();
