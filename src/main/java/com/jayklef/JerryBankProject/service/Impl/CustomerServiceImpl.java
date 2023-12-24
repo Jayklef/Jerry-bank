@@ -5,6 +5,7 @@ import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.repository.CustomerRepository;
 import com.jayklef.JerryBankProject.service.CustomerService;
 import com.jayklef.JerryBankProject.service.EmailService;
+import com.jayklef.JerryBankProject.service.TransactionService;
 import com.jayklef.JerryBankProject.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    TransactionService transactionService;
+
     @Override
     public BankResponse createAccount(CustomerRequest customerRequest) {
 
@@ -130,6 +135,16 @@ public class CustomerServiceImpl implements CustomerService {
 
         customerRepository.save(customerToCredit);
 
+        // Save transaction to DB
+
+        TransactionDto transactionDto = TransactionDto.builder()
+                .accountNumber(customerToCredit.getAccountNumber())
+                .amount(request.getAmount())
+                .transactionType("CREDIT")
+                .build();
+
+        transactionService.saveTransaction(transactionDto);
+
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_CREDITED_SUCCESSFULLY_CODE)
                 .responseMessage(AccountUtils.ACCOUNT_CREDITED_SUCCESSFULLY_MESSAGE)
@@ -167,6 +182,16 @@ public class CustomerServiceImpl implements CustomerService {
         }else {
             customerToDebit.setAccountBalance(customerToDebit.getAccountBalance().subtract(request.getAmount()));
             customerRepository.save(customerToDebit);
+
+            TransactionDto transactionDto = TransactionDto.builder()
+                    .accountNumber(customerToDebit.getAccountNumber())
+                    .amount(request.getAmount())
+                    .transactionType("DEBIT")
+                    .build();
+
+            transactionService.saveTransaction(transactionDto);
+
+
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_DEBITED_SUCCESSFULLY_CODE)
                     .responseMessage(AccountUtils.ACCOUNT_DEBITED_SUCCESSFULLY_MESSAGE)
@@ -242,6 +267,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
 
         emailService.sendEmailAlerts(creditEmail);
+
+        TransactionDto transactionDto = TransactionDto.builder()
+                .accountNumber(destinationAcctCustomer.getAccountNumber())
+                .amount(transferRequest.getAmount())
+                .transactionType("CREDIT")
+                .build();
+
+        transactionService.saveTransaction(transactionDto);
+
 
         return BankResponse.builder()
                 .responseCode(AccountUtils.TRANSFER_SUCCESSFUL_CODE)
