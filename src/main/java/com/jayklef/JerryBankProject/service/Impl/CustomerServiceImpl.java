@@ -62,8 +62,8 @@ public class CustomerServiceImpl implements CustomerService {
         EmailDetails emailDetails = EmailDetails.builder()
                 .subject("Account Creation")
                 .messageBody("Congratulations, Your Account has been created successfully \n Your Account Info\n" +
-                        "Account Name: " + customerNew.getFirstname().concat("").concat(customerNew.getLastname())
-                        .concat("").concat(customerNew.getMiddleName()) + "\nAccount Number: " + customerNew.getAccountNumber())
+                        "Account Name: " + customerNew.getFirstname() + " "+ (customerNew.getLastname())+ " "+
+                (customerNew.getMiddleName()) + "\nAccount Number: " + customerNew.getAccountNumber())
                 .build();
         emailService.sendEmailAlerts(emailDetails);
 
@@ -72,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .responseMessage(AccountUtils.ACCOUNT_CREATED_SUCCESSFULLY_MESSAGE)
                 .accountInfo(AccountInfo.builder()
                         .accountNumber(customerNew.getAccountNumber())
-                        .accountName(customerNew.getFirstname().concat(" ").concat(customerNew.getLastname()).concat(" ").concat(" ").concat(customerNew.getMiddleName()))
+                        .accountName(customerNew.getFirstname()+ " "+(customerNew.getLastname()+ " "+(customerNew.getMiddleName())))
                         .accountBalance(customerNew.getAccountBalance())
                         .build())
                 .build();

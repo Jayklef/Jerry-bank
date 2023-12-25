@@ -5,7 +5,9 @@ import com.jayklef.JerryBankProject.model.Transaction;
 import com.jayklef.JerryBankProject.repository.TransactionRepository;
 import com.jayklef.JerryBankProject.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
