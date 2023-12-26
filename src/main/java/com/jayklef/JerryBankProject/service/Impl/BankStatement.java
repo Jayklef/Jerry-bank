@@ -4,10 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.jayklef.JerryBankProject.dto.EmailDetails;
 import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.model.Transaction;
 import com.jayklef.JerryBankProject.repository.CustomerRepository;
 import com.jayklef.JerryBankProject.repository.TransactionRepository;
+import com.jayklef.JerryBankProject.service.EmailService;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class BankStatement {
 
     private TransactionRepository transactionRepository;
     private CustomerRepository customerRepository;
+    private EmailService emailService;
     private static final String FILE = "//users//jerryarhawho//documents//Testing//MyStatement.pdf";
 
     public List<Transaction> generateStatement(String accountNumber, String startDate, String endDate) throws FileNotFoundException, DocumentException {
@@ -144,6 +147,15 @@ public class BankStatement {
         document.add(transactionsTable);
 
         document.close();
+
+        EmailDetails emailDetails = EmailDetails.builder()
+                .recipient(customer.getEmail())
+                .subject("Bank Statement")
+                .messageBody("Please find your bank statement attached")
+                .attachment(FILE)
+                .build();
+
+        emailService.sendEmailWithAttachment(emailDetails);
 
         return transactions;
     }
