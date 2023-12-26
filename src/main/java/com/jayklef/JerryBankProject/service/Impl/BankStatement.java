@@ -28,7 +28,7 @@ public class BankStatement {
 
     private TransactionRepository transactionRepository;
     private CustomerRepository customerRepository;
-    private static final String FILE = "C:\\Users\\Admin\\Documents\\MyStatement.pdf";
+    private static final String FILE = "//users//jerryarhawho//documents//Testing//MyStatement.pdf";
 
     public List<Transaction> generateStatement(String accountNumber, String startDate, String endDate) throws FileNotFoundException, DocumentException {
         LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
