@@ -1,13 +1,19 @@
 package com.jayklef.JerryBankProject.service.Impl;
 
+import com.jayklef.JerryBankProject.config.JwtTokenGenerator;
 import com.jayklef.JerryBankProject.dto.*;
 import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.repository.CustomerRepository;
 import com.jayklef.JerryBankProject.service.CustomerService;
 import com.jayklef.JerryBankProject.service.EmailService;
 import com.jayklef.JerryBankProject.service.TransactionService;
+import com.jayklef.JerryBankProject.dto.LoginDto;
 import com.jayklef.JerryBankProject.utils.AccountUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Service
+@AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
@@ -28,6 +35,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     TransactionService transactionService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenGenerator jwtTokenGenerator;
 
     @Override
     public BankResponse createAccount(CustomerRequest customerRequest) {
@@ -82,6 +95,26 @@ public class CustomerServiceImpl implements CustomerService {
                         .build())
                 .build();
 
+    }
+
+    public BankResponse login(LoginDto loginDto){
+        Authentication authentication = null;
+        authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getEmail(), loginDto.getPassword()
+        ));
+
+        EmailDetails loginAlert = EmailDetails.builder()
+                .subject("Login Alert")
+                .recipient(loginDto.getEmail())
+                .messageBody("You logged into your account. Please contact your bank if you did not initiate the login")
+                .build();
+
+        emailService.sendEmailAlerts(loginAlert);
+
+        return BankResponse.builder()
+                .responseCode("Login Success")
+                .responseMessage(jwtTokenGenerator.generateToken(authentication))
+                .build();
     }
 
     @Override
@@ -217,7 +250,7 @@ public class CustomerServiceImpl implements CustomerService {
         // get account to debit and check if it exists
         // check if amount is more than current balance
         // debit the account
-        // get the account to credit
+        // get the account to credit.
         // credit the account
 
         boolean isDestinationAccountExist = customerRepository.existsByAccountNumber(transferRequest.getDestinationAccountNumber());

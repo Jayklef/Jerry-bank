@@ -50,6 +50,7 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(authorize->
                         authorize.requestMatchers(HttpMethod.POST, "/api/customers/create").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/customers/login").permitAll()
                                 .anyRequest().authenticated());
 
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

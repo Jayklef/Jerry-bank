@@ -7,16 +7,19 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtTokenGenerator {
-    @Value("${app.jwtSecret}")
+    @Value("${app.jwt-secret}")
     private String jwtSecret;
-    @Value("${app.jwtExpirationDate}")
+    @Value("${app.jwt-expiration}")
     private String jwtExpirationDate;
 
 

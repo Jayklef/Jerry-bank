@@ -43,6 +43,11 @@ public class CustomerController {
         return customerService.balanceEnquiry(enquiryRequest);
     }
 
+    @PostMapping("login")
+    public BankResponse login(@RequestBody LoginDto loginDto){
+        return customerService.login(loginDto);
+    }
+
     @Operation(
             summary = "Name Enquiry",
             description = "Checking a customer account name, given an account number"
