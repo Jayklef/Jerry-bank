@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/customer/")
+@RequestMapping("/api/customers/")
 @Tag(name = "Customer Account Management API")
 public class CustomerController {
 

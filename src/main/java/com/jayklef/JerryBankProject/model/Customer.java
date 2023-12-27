@@ -24,6 +24,7 @@ public class Customer {
     private String lastname;
     private String middleName;
     private String email;
+    private String password;
     private String gender;
     private String telephone;
     private String alternateNumber;

@@ -8,6 +8,7 @@ import com.jayklef.JerryBankProject.service.EmailService;
 import com.jayklef.JerryBankProject.service.TransactionService;
 import com.jayklef.JerryBankProject.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +19,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     EmailService emailService;
@@ -45,6 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .lastname(customerRequest.getLastname())
                 .middleName(customerRequest.getMiddleName())
                 .email(customerRequest.getEmail())
+                .password(passwordEncoder.encode(customerRequest.getPassword()))
                 .gender(customerRequest.getGender())
                 .accountNumber(AccountUtils.generateAccountNumber())
                 .accountBalance(BigDecimal.ZERO)
