@@ -3,10 +3,12 @@ package com.jayklef.JerryBankProject.controller;
 import com.jayklef.JerryBankProject.dto.*;
 import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.service.CustomerService;
+import com.jayklef.JerryBankProject.utils.ParamConstraint;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -109,9 +111,13 @@ public class CustomerController {
     }
 
     @GetMapping("all")
-    public ResponseEntity<List<Customer>> findAllCustomers(){
-        List<Customer> customers = customerService.findAllCustomers();
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
+    public CustomerResponse findAllCustomers(
+            @RequestParam(value = "pageNo", defaultValue = ParamConstraint.DEFAULT_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ParamConstraint.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ParamConstraint.DEFAULT_SORT_BY, required = false)String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ParamConstraint.DEFAULT_SORT_DIRECTION, required = false) String sortDir){
 
+        CustomerResponse response = customerService.findAllCustomers(pageNo, pageSize, sortBy, sortDir);
+        return response;
+    }
 }

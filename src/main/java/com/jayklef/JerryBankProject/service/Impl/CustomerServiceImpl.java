@@ -11,6 +11,10 @@ import com.jayklef.JerryBankProject.dto.LoginDto;
 import com.jayklef.JerryBankProject.utils.AccountUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -121,11 +125,33 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> findAllCustomers() {
-        List<Customer> customers = customerRepository.findAll();
-        return customers.stream()
-                .sorted()
+    public CustomerResponse findAllCustomers(int pageNo, int pageSize, String sortBy, String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.DEFAULT_DIRECTION.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<Customer> customers = customerRepository.findAll(pageable);
+
+        // get content
+
+        List<Customer> customerList = customers.getContent();
+        List<BankResponse> content = customerList
+                .stream()
+                .map(customer -> new BankResponse())
                 .collect(Collectors.toList());
+
+        CustomerResponse customerResponse = CustomerResponse.builder()
+                .content(content)
+                .pageNo(customers.getNumber())
+                .pageSize(customers.getSize())
+                .totalElements(customers.getTotalElements())
+                .totalPages(customers.getTotalPages())
+                .last(customers.isLast())
+                .build();
+
+        return customerResponse;
     }
 
 

@@ -17,5 +17,5 @@ public interface CustomerService {
     BankResponse transfer(TransferRequest transferRequest);
     BankResponse login(LoginDto loginDto);
 
-    List<Customer> findAllCustomers();
+    CustomerResponse findAllCustomers(int pageNo, int pageSize, String sortBy, String sortDir);
 }
