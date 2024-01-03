@@ -1,6 +1,9 @@
 package com.jayklef.JerryBankProject.service;
 
 import com.jayklef.JerryBankProject.dto.*;
+import com.jayklef.JerryBankProject.model.Customer;
+
+import java.util.List;
 
 public interface CustomerService {
 
@@ -13,4 +16,6 @@ public interface CustomerService {
     BankResponse debitAccount(CreditDebitRequest request);
     BankResponse transfer(TransferRequest transferRequest);
     BankResponse login(LoginDto loginDto);
+
+    List<Customer> findAllCustomers();
 }

@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -116,6 +119,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .responseMessage(jwtTokenGenerator.generateToken(authentication))
                 .build();
     }
+
+    @Override
+    public List<Customer> findAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public BankResponse balanceEnquiry(EnquiryRequest request) {

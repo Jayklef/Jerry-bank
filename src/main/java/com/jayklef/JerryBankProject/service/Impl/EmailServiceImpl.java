@@ -4,6 +4,7 @@ import com.jayklef.JerryBankProject.dto.EmailDetails;
 import com.jayklef.JerryBankProject.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
