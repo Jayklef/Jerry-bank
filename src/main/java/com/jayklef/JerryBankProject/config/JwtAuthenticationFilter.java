@@ -20,15 +20,15 @@ import java.io.IOException;
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtTokenGenerator jwtTokenGenerator;
+    private JwtAuthenticationProvide jwtAuthenticationProvide;
     private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String token = getTokenFromRequest(request);
-        if (StringUtils.hasText(token) && jwtTokenGenerator.validateToken(token)){
-            String username = jwtTokenGenerator.getUsername(token);
+        if (StringUtils.hasText(token) && jwtAuthenticationProvide.validateToken(token)){
+            String username = jwtAuthenticationProvide.getUsername(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

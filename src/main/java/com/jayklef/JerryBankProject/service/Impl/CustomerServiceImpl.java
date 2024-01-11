@@ -1,6 +1,6 @@
 package com.jayklef.JerryBankProject.service.Impl;
 
-import com.jayklef.JerryBankProject.config.JwtTokenGenerator;
+import com.jayklef.JerryBankProject.config.JwtAuthenticationProvide;
 import com.jayklef.JerryBankProject.dto.*;
 import com.jayklef.JerryBankProject.model.Customer;
 import com.jayklef.JerryBankProject.repository.CustomerRepository;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtTokenGenerator jwtTokenGenerator;
+    private JwtAuthenticationProvide jwtTokenGenerator;
 
     @Override
     public BankResponse createAccount(CustomerRequest customerRequest) {
